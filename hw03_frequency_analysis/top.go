@@ -16,13 +16,13 @@ func Top10(inputString string) []string {
 		return make([]string, 0)
 	}
 
-	var wordsFreqMap map[string]int = make(map[string]int)
+	wordsFreqMap := make(map[string]int, 0)
 
 	for _, word := range words {
 		wordsFreqMap[word]++
 	}
 
-	var wordsFreq []WordsFreq = make([]WordsFreq, 0)
+	wordsFreq := make([]WordsFreq, 0)
 
 	for key, value := range wordsFreqMap {
 		wordsFreq = append(wordsFreq, WordsFreq{key, value})
@@ -35,7 +35,7 @@ func Top10(inputString string) []string {
 		return wordsFreq[i].Value > wordsFreq[j].Value
 	})
 
-	var top10words []string = make([]string, 0)
+	top10words := make([]string, 0)
 	for _, wordFreq := range wordsFreq {
 		top10words = append(top10words, wordFreq.Key)
 	}
