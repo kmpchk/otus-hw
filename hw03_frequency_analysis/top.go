@@ -16,7 +16,7 @@ func Top10(inputString string) []string {
 		return make([]string, 0)
 	}
 
-	wordsFreqMap := make(map[string]int, 0)
+	wordsFreqMap := make(map[string]int)
 
 	for _, word := range words {
 		wordsFreqMap[word]++
