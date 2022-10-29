@@ -9,7 +9,7 @@ import (
 // Change to true if needed.
 var taskWithAsteriskIsCompleted = false
 
-var ru_text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
+var rusText = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
 	ступеньки собственным затылком:  бум-бум-бум.  Другого  способа
 	сходить  с  лестницы  он  пока  не  знает.  Иногда ему, правда,
@@ -43,7 +43,7 @@ var ru_text = `Как видите, он  спускается  по  лестн
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
 
-var en_text = `Go (also called Golang or Go language) is an open source programming language
+var engText = `Go (also called Golang or Go language) is an open source programming language
 used for general purpose. Go was developed by Google engineers to create dependable
 and efficient software. Most similarly modeled after C, Go is statically typed and explicit.
 The language was designed by taking inspiration for the productivity and relative simplicity
@@ -70,7 +70,7 @@ func TestTop10(t *testing.T) {
 				"кристофер", // 4
 				"не",        // 4
 			}
-			require.Equal(t, expected, Top10(ru_text))
+			require.Equal(t, expected, Top10(rusText))
 		} else {
 			expected := []string{
 				"он",        // 8
@@ -84,7 +84,7 @@ func TestTop10(t *testing.T) {
 				"не",        // 4
 				"то",        // 4
 			}
-			require.Equal(t, expected, Top10(ru_text))
+			require.Equal(t, expected, Top10(rusText))
 		}
 	})
 
@@ -101,26 +101,26 @@ func TestTop10(t *testing.T) {
 			"was",      // 1
 			"(also",    // 1
 		}
-		require.Equal(t, expected, Top10(en_text))
+		require.Equal(t, expected, Top10(engText))
 	})
 
 	t.Run("check word form", func(t *testing.T) {
-		test_text := "нога ногу ноги"
+		testText := "нога ногу ноги"
 		expected := []string{"нога", "ноги", "ногу"}
-		require.Equal(t, expected, Top10(test_text))
+		require.Equal(t, expected, Top10(testText))
 	})
 
 	t.Run("check if two words are equal to each other", func(t *testing.T) {
-		test_text := "Нога нога"
+		testText := "Нога нога"
 		expected := []string{"Нога", "нога"}
-		/*test_text := "нога нога"
+		/*testText := "нога нога"
 		expected := []string{"нога"}*/
-		require.Equal(t, expected, Top10(test_text))
+		require.Equal(t, expected, Top10(testText))
 	})
 
 	t.Run("less than 10 words", func(t *testing.T) {
-		test_text_pass := "Go Update Available Install Live Share IDE CRLF GO"
-		//test_text_fail := "Go Update Available Install Live Share IDE CRLF GO CrLF"
-		require.Less(t, len(Top10(test_text_pass)), 10)
+		testTextPass := "Go Update Available Install Live Share IDE CRLF GO"
+		// testTextFail := "Go Update Available Install Live Share IDE CRLF GO CrLF"
+		require.Less(t, len(Top10(testTextPass)), 10)
 	})
 }
