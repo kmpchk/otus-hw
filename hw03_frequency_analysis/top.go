@@ -35,7 +35,7 @@ func Top10(inputString string) []string {
 		return wordsFreq[i].Value > wordsFreq[j].Value
 	})
 
-	top10words := make([]string, 0)
+	top10words := make([]string, 0, len(wordsFreq))
 	for _, wordFreq := range wordsFreq {
 		top10words = append(top10words, wordFreq.Key)
 	}
