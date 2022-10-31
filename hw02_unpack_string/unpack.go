@@ -26,13 +26,7 @@ func IsStringValid(runeStr []rune) bool {
 			if len(runeStr) == 2 {
 				return false
 			}
-			if i-2 >= 0 && runeStr[i-1] == slash && runeStr[i-2] == slash {
-				return false
-			}
-			if i-2 >= 0 && runeStr[i-1] == slash && runeStr[i-2] != slash {
-				return false
-			}
-			if i-2 >= 0 && runeStr[i-1] != slash && runeStr[i-2] != slash {
+			if i-2 >= 0 && (runeStr[i-1] == slash || runeStr[i-1] != slash) && (runeStr[i-2] == slash || runeStr[i-2] != slash) {
 				return false
 			}
 		}
