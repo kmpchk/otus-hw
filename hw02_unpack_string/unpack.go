@@ -103,10 +103,7 @@ func Unpack(inputString string) (string, error) {
 
 		// Update pos
 		pos += offset
-		// fmt.Printf("Pos = %d, Offset = %d\n", pos, offset)
 	}
 
-	// fmt.Println(len(runeStr))
-	fmt.Println(output.String())
 	return output.String(), nil
 }
