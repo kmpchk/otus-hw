@@ -18,5 +18,10 @@ func init() {
 
 func main() {
 	flag.Parse()
-	// Place your code here.
+	// fmt.Printf("from = %s\n", from)
+	// fmt.Printf("to = %s\n", to)
+	// fmt.Printf("offset = %d\n", offset)
+	// fmt.Printf("limit = %d\n", limit)
+
+	Copy(from, to, offset, limit)
 }
