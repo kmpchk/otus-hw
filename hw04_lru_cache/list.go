@@ -37,22 +37,15 @@ func (l *list) Back() *ListItem {
 func (l *list) PushBack(v interface{}) *ListItem {
 	var newElem *ListItem = new(ListItem)
 	newElem.Value = v
+	newElem.Next = nil
+	newElem.Prev = l.tail
 
-	if (l.head == nil) && (l.tail == nil) {
-		newElem.Prev = nil
-		newElem.Next = nil
-		l.head = newElem
-		l.tail = newElem
+	if newElem.Prev != nil {
+		l.tail.Next = newElem
 	} else {
-		//var exch_var *ListItem = l.tail
-		//newElem.Prev = l.head
-		l.Back().Next = newElem
-		//l.head = l.tail
-		l.tail = newElem
-		//l.head.Next = l.tail
-		newElem.Prev = l.tail
-		newElem.Next = nil
+		l.head = newElem
 	}
+	l.tail = newElem
 
 	l.len++
 
@@ -62,22 +55,15 @@ func (l *list) PushBack(v interface{}) *ListItem {
 func (l *list) PushFront(v interface{}) *ListItem {
 	var newElem *ListItem = new(ListItem)
 	newElem.Value = v
+	newElem.Prev = nil
+	newElem.Next = l.head
 
-	if (l.head == nil) && (l.tail == nil) {
-		newElem.Prev = nil
-		newElem.Next = nil
-		l.head = newElem
-		l.tail = newElem
+	if newElem.Next != nil {
+		l.head.Prev = newElem
 	} else {
-		//var exch_var *ListItem = l.tail
-		//newElem.Prev = l.head
-		//l.tail = l.head
-		l.Front().Prev = newElem
-		newElem.Next = l.head
-		l.head = newElem
-		//l.head.Next = l.tail
-		newElem.Prev = nil
+		l.tail = newElem
 	}
+	l.head = newElem
 
 	l.len++
 
@@ -91,7 +77,6 @@ func (l *list) Remove(i *ListItem) {
 
 		if prev != nil {
 			prev.Next = next
-			//fmt.Println(next)
 		}
 		if next != nil {
 			next.Prev = prev
@@ -104,12 +89,8 @@ func (l *list) Remove(i *ListItem) {
 func (l *list) MoveToFront(i *ListItem) {
 	if i != nil {
 		if i != l.head {
-			//l.Front().Value = i.Value
-			head := l.head
-			l.head = i
-			l.head.Prev = nil
-			l.head.Next = head
-			head.Prev = l.head
+			l.PushFront(i.Value)
+			l.Remove(i)
 		}
 	}
 }
