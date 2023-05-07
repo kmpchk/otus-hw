@@ -11,6 +11,7 @@ import (
 var (
 	ErrUnsupportedFile       = errors.New("unsupported file")
 	ErrOffsetExceedsFileSize = errors.New("offset exceeds file size")
+	ErrLimitExceedsFileSize  = errors.New("limit exceeds file size")
 	ErrCopyFile              = errors.New("smth wrong with file copying")
 )
 
@@ -39,6 +40,10 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 
 	if offset > inFileSize {
 		return ErrOffsetExceedsFileSize
+	}
+
+	if offset+limit > inFileSize {
+		return ErrLimitExceedsFileSize
 	}
 
 	if limit == 0 || limit > inFileSize {
