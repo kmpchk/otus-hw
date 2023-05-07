@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"errors"
-	"fmt"
 	"io"
 	"os"
 
@@ -16,20 +14,7 @@ var (
 	ErrCopyFile              = errors.New("smth wrong with file copying")
 )
 
-func getNewFileSize(fileSize int64, offset int64, limit int64) int64 {
-	n := fileSize
-	if offset > 0 {
-		n -= offset
-	}
-	if limit > 0 && n > limit {
-		n = limit
-	}
-	return n
-}
-
 func Copy(fromPath, toPath string, offset, limit int64) error {
-	//println("Hello from Copy!")
-
 	inFileInfo, err := os.Stat(fromPath)
 	if err != nil {
 		return err
@@ -41,7 +26,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 
 	inFile, err := os.Open(fromPath)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	defer func() {
@@ -51,11 +36,9 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	}()
 
 	inFileSize := inFileInfo.Size()
-	fmt.Println(inFile.Name())
-	fmt.Println(inFileSize)
 
 	if offset > inFileSize {
-		panic(ErrOffsetExceedsFileSize)
+		return ErrOffsetExceedsFileSize
 	}
 
 	if limit == 0 || limit > inFileSize {
@@ -64,7 +47,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 
 	outFile, err := os.Create(toPath)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	defer func() {
@@ -73,24 +56,13 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		}
 	}()
 
-	limit = getNewFileSize(inFileSize, offset, limit)
-	if offset > 0 {
-		_, err = inFile.Seek(offset, io.SeekStart)
-		if err != nil {
-			return err
-		}
-	}
-
-	//var seek io.ReadSeeker = inFile
-	//seek.Seek(offset, io.SeekStart)
-	buf := bufio.NewReaderSize(inFile, int(inFileSize))
 	inFile.Seek(offset, io.SeekStart)
 
 	progressBar := pb.Full.Start64(limit)
-	barReader := progressBar.NewProxyReader(buf)
+	barReader := progressBar.NewProxyReader(inFile)
 	_, err = io.CopyN(outFile, barReader, limit)
 	if err != nil {
-		panic(ErrCopyFile)
+		return ErrCopyFile
 	}
 	progressBar.Finish()
 
