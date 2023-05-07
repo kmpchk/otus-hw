@@ -10,7 +10,6 @@ import (
 
 func TestCopy(t *testing.T) {
 	t.Run("offset is larger than file size", func(t *testing.T) {
-
 		// create temp file
 		content := []byte("TestFile")
 		tmpfile, err := os.CreateTemp("", "test_file-")
