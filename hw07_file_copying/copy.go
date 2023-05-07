@@ -55,6 +55,10 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		limit = inFileSize
 	}
 
+	if limit+offset > inFileSize {
+		limit = inFileSize - offset
+	}
+
 	outFile, err := os.Create(toPath)
 	if err != nil {
 		return err
