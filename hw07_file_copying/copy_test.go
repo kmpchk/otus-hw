@@ -12,7 +12,7 @@ func TestCopy(t *testing.T) {
 	t.Run("offset is larger than file size", func(t *testing.T) {
 		// create temp file
 		content := []byte("TestFile")
-		tmpfile, err := os.CreateTemp("", "test_file-")
+		tmpfile, err := os.CreateTemp("", "test_file.bin")
 		if err != nil {
 			require.NoError(t, err)
 		}
@@ -28,10 +28,19 @@ func TestCopy(t *testing.T) {
 		}
 
 		// do copying
-		err = Copy(tmpfile.Name(), "/tmp/", 10000, 100)
+		err = Copy(tmpfile.Name(), "/tmp/test_file.bin", 10000, 100)
 		if err != nil {
 			log.Println(err)
 		}
 		require.EqualError(t, err, "offset exceeds file size")
+	})
+
+	t.Run("unsupported source", func(t *testing.T) {
+		// do copying
+		err := Copy("/dev/urandom", "/tmp/test_file.bin", 10000, 100)
+		if err != nil {
+			log.Println(err)
+		}
+		require.EqualError(t, err, ErrUnsupportedFile.Error())
 	})
 }
