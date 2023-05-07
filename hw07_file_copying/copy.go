@@ -11,11 +11,16 @@ import (
 var (
 	ErrUnsupportedFile       = errors.New("unsupported file")
 	ErrOffsetExceedsFileSize = errors.New("offset exceeds file size")
-	ErrLimitExceedsFileSize  = errors.New("limit exceeds file size")
 	ErrCopyFile              = errors.New("smth wrong with file copying")
+	ErrSetOffset             = errors.New("failed to set offset")
+	ErrPathCmp               = errors.New("in path equal to out path")
 )
 
 func Copy(fromPath, toPath string, offset, limit int64) error {
+	if fromPath == toPath {
+		return ErrPathCmp
+	}
+
 	inFileInfo, err := os.Stat(fromPath)
 	if err != nil {
 		return err
@@ -42,8 +47,8 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		return ErrOffsetExceedsFileSize
 	}
 
-	if offset+limit > inFileSize {
-		return ErrLimitExceedsFileSize
+	if _, err := inFile.Seek(offset, io.SeekStart); err != nil {
+		return ErrSetOffset
 	}
 
 	if limit == 0 || limit > inFileSize {
@@ -61,15 +66,10 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		}
 	}()
 
-	inFile.Seek(offset, io.SeekStart)
-
 	progressBar := pb.Full.Start64(limit)
 	barReader := progressBar.NewProxyReader(inFile)
 	_, err = io.CopyN(outFile, barReader, limit)
-	if err != nil {
-		return ErrCopyFile
-	}
 	progressBar.Finish()
 
-	return nil
+	return err
 }
