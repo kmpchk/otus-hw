@@ -53,6 +53,15 @@ func TestCopy(t *testing.T) {
 		require.EqualError(t, err, ErrPathCmp.Error())
 	})
 
+	t.Run("input path equal to relative output path", func(t *testing.T) {
+		// do copying
+		err := Copy("testdata/input.txt", "testdata/../testdata/input.txt", 0, 100000)
+		if err != nil {
+			log.Println(err)
+		}
+		require.EqualError(t, err, ErrPathCmp.Error())
+	})
+
 	t.Run("positive full file copying", func(t *testing.T) {
 		// do copying
 		err := Copy("testdata/input.txt", "testdata/test_offset0_limit0.txt", 0, 0)
