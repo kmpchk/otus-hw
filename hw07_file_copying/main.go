@@ -20,11 +20,6 @@ func init() {
 
 func main() {
 	flag.Parse()
-	// fmt.Printf("from = %s\n", from)
-	// fmt.Printf("to = %s\n", to)
-	// fmt.Printf("offset = %d\n", offset)
-	// fmt.Printf("limit = %d\n", limit)
-
 	err := Copy(from, to, offset, limit)
 	if err != nil {
 		fmt.Println(err)

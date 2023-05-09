@@ -2,8 +2,10 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/cheggaaa/pb/v3"
 )
@@ -13,10 +15,20 @@ var (
 	ErrOffsetExceedsFileSize = errors.New("offset exceeds file size")
 	ErrCopyFile              = errors.New("smth wrong with file copying")
 	ErrSetOffset             = errors.New("failed to set offset")
-	ErrPathCmp               = errors.New("in path equal to out path")
+	ErrPathCmp               = errors.New("input path equal to output path")
 )
 
 func Copy(fromPath, toPath string, offset, limit int64) error {
+	fromPath, err := filepath.Abs(fromPath)
+	if err != nil {
+		return err
+	}
+
+	toPath, err = filepath.Abs(toPath)
+	if err != nil {
+		return err
+	}
+
 	if fromPath == toPath {
 		return ErrPathCmp
 	}
@@ -37,7 +49,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 
 	defer func() {
 		if err := inFile.Close(); err != nil {
-			panic(err)
+			fmt.Printf("Failed to close input file: %s\n", err)
 		}
 	}()
 
@@ -66,7 +78,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 
 	defer func() {
 		if err := outFile.Close(); err != nil {
-			panic(err)
+			fmt.Printf("Failed to close output file: %s\n", err)
 		}
 	}()
 
