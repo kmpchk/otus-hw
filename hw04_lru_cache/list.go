@@ -72,13 +72,20 @@ func (l *list) PushFront(v interface{}) *ListItem {
 
 func (l *list) Remove(i *ListItem) {
 	if i != nil {
-		prev := i.Prev
-		next := i.Next
-
-		if prev != nil {
+		switch {
+		case l.len == 1 && l.head == i:
+			l.head = nil
+			l.tail = nil
+		case l.head == i:
+			l.head = i.Next
+			l.head.Prev = nil
+		case l.tail == i:
+			l.tail = i.Prev
+			l.tail.Next = nil
+		default:
+			prev := i.Prev
+			next := i.Next
 			prev.Next = next
-		}
-		if next != nil {
 			next.Prev = prev
 		}
 
