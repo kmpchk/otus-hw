@@ -1,5 +1,7 @@
 package hw04lrucache
 
+import "fmt"
+
 type List interface {
 	Len() int
 	Front() *ListItem
@@ -73,20 +75,19 @@ func (l *list) PushFront(v interface{}) *ListItem {
 func (l *list) Remove(i *ListItem) {
 	if i != nil {
 		switch {
-		case l.len == 1 && l.head == i:
-			l.head = nil
-			l.tail = nil
-		case l.head == i:
-			l.head = i.Next
-			l.head.Prev = nil
-		case l.tail == i:
+		case i.Prev != nil && i.Next != nil:
+			i.Prev.Next = i.Next
+			i.Next.Prev = i.Prev
+		case i.Prev == nil && i.Next != nil:
+			l.head = i.Next.Prev
+		case i.Prev != nil && i.Next == nil:
 			l.tail = i.Prev
 			l.tail.Next = nil
+		case i.Prev == nil && i.Next == nil:
+			l.head = nil
+			l.tail = nil
 		default:
-			prev := i.Prev
-			next := i.Next
-			prev.Next = next
-			next.Prev = prev
+			fmt.Println("smth went wrong...")
 		}
 
 		l.len--
